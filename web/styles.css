@@ -1,0 +1,165 @@
+/* Copyright Tax Policy Associates Limited 2026. MIT licence: see LICENSE.
+   Poppins, house blue, light surface. Headline figures above the controls. */
+@font-face{font-family:Poppins;font-style:normal;font-weight:400;src:url('poppins-400.woff2') format('woff2');font-display:swap}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;src:url('poppins-600.woff2') format('woff2');font-display:swap}
+:root{--blue:#1f4bd8;--ink:#151a2e;--secondary:#3a4256;--muted:#586278;--line:#dce1ec;--bg:#f4f6fb;--paper:#fff;--soft:#eef2ff;--positive:#096743;--negative:#ac3025;--warning:#79520d}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:20px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:auto;padding:24px 24px 36px}
+a{color:var(--blue);text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+::selection{background:var(--blue);color:white}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+input{caret-color:var(--blue)}
+[hidden]{display:none!important}
+.field-hint{font-size:.75rem;line-height:1.4;color:var(--muted);margin:6px 0 0}
+.economic-results dd.field-hint{font-size:.75rem;font-weight:400;letter-spacing:normal}
+.economic-results dd.not-estimated{font-size:1.05rem;white-space:normal}
+#scenario-url{display:block;width:100%;margin:8px 0;padding:8px;font:inherit;font-size:16px}
+button{font:inherit;font-size:.82rem;font-weight:600;border:1px solid var(--line);background:var(--paper);color:var(--secondary);padding:10px 14px;border-radius:8px;cursor:pointer;min-height:44px}
+button:hover{border-color:var(--blue);color:var(--blue);background:var(--soft)}
+button[aria-pressed=true]{color:white;background:var(--blue);border-color:var(--blue)}
+button:disabled{cursor:default;opacity:.65}
+.text-button{background:transparent;border-color:transparent;color:var(--blue);padding:8px}
+.sr,.skip:not(:focus){position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip:focus{display:block;padding:12px;background:var(--paper)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
+.brand img{display:block;object-fit:contain;width:auto;height:40px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+h1{font-size:clamp(1.65rem,3.4vw,2.3rem);font-weight:600;line-height:1.23;letter-spacing:-.025em;margin:0 0 12px;text-wrap:balance}
+h2{font-size:1.3rem;font-weight:600;line-height:1.35;margin:0 0 12px}
+p{margin:0 0 12px}
+.preset-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#presets{display:flex;gap:6px;flex-wrap:wrap}
+#scenario-name{color:var(--muted);font-size:.8rem;margin-left:auto}
+.results{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:28px 30px 20px}
+.headline-pair{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:20px}
+/* The free-money scenario adds a third tile, because the voucher is the input
+   that produced the other two and the reader should not have to hunt for it. */
+.headline-pair.has-voucher{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:28px}
+#voucher-tile .big-number{color:var(--secondary)}
+select.choice{font:inherit;font-size:.95rem;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:inherit;min-width:190px}
+select.choice:disabled{opacity:.5;cursor:not-allowed}
+.balance h2{font-size:.95rem;color:var(--secondary);margin-bottom:10px}
+.big-number{font-size:clamp(2.8rem,6vw,4rem);line-height:1.12;letter-spacing:-.03em;font-weight:600;font-variant-numeric:tabular-nums;color:var(--blue)}
+.big-number.negative{color:var(--negative)}
+#balance-caption,#gva-caption{font-size:.79rem;color:var(--muted);margin:10px 0 0}
+.provenance{border-top:1px solid var(--line);margin-top:28px;padding-top:16px}
+.provenance p{font-size:.76rem;color:var(--muted);margin:0;max-width:100ch}
+dl{margin:0;font-variant-numeric:tabular-nums}
+dd{margin:0}
+/* Tax in, refunds out: one row, because they are the two halves of one sum. */
+.fiscal-parts{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;border-bottom:1px solid var(--line)}
+.fiscal-parts>div{display:flex;align-items:baseline;justify-content:flex-start;gap:14px;padding:9px 0}
+.fiscal-parts dt{color:var(--secondary);font-size:.84rem}
+.fiscal-parts dd{font-size:1.2rem;font-weight:600;white-space:nowrap}
+.economic-results{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;border-top:1px solid var(--line);padding-top:22px}
+.economic-results dt{color:var(--muted);font-size:.74rem;min-height:2.8em}
+.economic-results dd{font-size:1.75rem;line-height:1.25;font-weight:600;letter-spacing:-.025em;white-space:nowrap}
+.result-scope{font-size:.72rem;color:var(--muted);margin:20px 0 0;max-width:100ch}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:34px}
+.section-head h2{margin:0}
+.control-group{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.control-group>summary{font-size:1rem;font-weight:600;padding:18px 22px;cursor:pointer;display:list-item;list-style-position:inside}
+.control-group>summary:hover{background:var(--soft)}
+.group-fields{padding:0 22px 8px}
+.field{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,280px);gap:10px 40px;padding:20px 0;border-top:1px solid var(--line);align-items:start}
+.field:first-child{border-top:0}
+.field-label{font-size:.85rem;font-weight:600;line-height:1.5;display:block}
+.value-control{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.value-control input[type=number]{width:148px;min-width:0;padding:8px 10px;border:1px solid #adb6c7;border-radius:6px;font:inherit;font-size:.88rem;font-variant-numeric:tabular-nums;text-align:right;background:var(--paper);color:var(--ink);min-height:42px}
+.unit{font-size:.77rem;color:var(--secondary);min-width:45px}
+input[type=range]{width:100%;accent-color:var(--blue);height:30px;margin:8px 0 0;cursor:pointer}
+input[type=checkbox]{accent-color:var(--blue);height:24px;width:24px;margin:0;cursor:pointer;flex-shrink:0}
+.switch-wrap{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-height:40px;padding:0 8px}
+.switch-state{font-size:.8rem;color:var(--secondary);min-width:28px}
+.inactive .field-label,.inactive .unit{color:var(--muted)}
+.inactive input{opacity:.55;cursor:not-allowed}
+.working-section,#reconciliation{margin-top:38px}
+.table-scroll{overflow-x:auto;scrollbar-color:#adb6c7 var(--bg);background:var(--paper);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.78rem;font-variant-numeric:tabular-nums}
+th{font-weight:600;text-align:left;background:#edf0f7;color:var(--secondary)}
+th,td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td:first-child{min-width:190px}
+.numeric{text-align:right;white-space:nowrap}
+.status-match{color:var(--positive);white-space:nowrap}
+.status-gap{color:var(--negative);font-weight:600;white-space:nowrap}
+.error,.notice{font-size:.85rem;padding:12px 16px;background:#fff2df;border:1px solid #d2aa65;border-radius:8px;color:#593b08}
+.error{color:var(--negative);background:#fff1ef;border-color:#ce9b95}
+footer{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);font-size:.75rem;color:var(--muted)}
+footer p{margin-bottom:5px}
+@media(max-width:720px){.fiscal-parts{grid-template-columns:1fr}.fiscal-parts>div{justify-content:space-between}.economic-results{grid-template-columns:1fr 1fr}.wrap{padding:18px 16px 28px}.top{align-items:flex-start;gap:12px}.tools{justify-content:flex-end}.tools button{font-size:.72rem;padding:8px}.brand img{height:32px}.headline-pair{gap:20px}.results{padding:22px 20px 18px}.economic-results{grid-template-columns:1fr 1fr;gap:18px}.economic-results dt{min-height:0;margin-bottom:6px}.field{grid-template-columns:1fr;gap:12px}.value-control{justify-content:flex-start}.value-control input[type=number]{width:160px}.switch-wrap{justify-content:flex-start;padding:0;min-height:44px}.group-fields{padding:0 18px 8px}.control-group>summary{padding:16px 18px}#scenario-name{margin-left:0}.section-head{align-items:baseline}}
+@media(max-width:450px){.headline-pair{grid-template-columns:1fr;padding-bottom:20px;gap:14px}.fiscal-parts dd{font-size:1.05rem}.economic-results dd{font-size:1.45rem}.top{flex-direction:column;gap:16px}.tools{justify-content:flex-start}.preset-bar{gap:8px}#presets{display:grid;width:100%}#presets button{text-align:left}.big-number{font-size:3.2rem}.section-head h2{font-size:1.25rem}.control-group>summary{font-size:.92rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.tools,.preset-bar button,input[type=range],.skip{display:none}body{background:white}.wrap{max-width:none}.table-scroll{overflow:visible}.control-group{break-inside:avoid}.results{break-inside:avoid}}
+
+
+/* ---- compact form: label, info icon, control, several to a line ---- */
+/* One packing row per group: switches pair up, sliders sit together, and a
+   switch with inputs under it takes the full width. */
+.group-fields{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px 20px}
+/* Two switches to a row, so the numeric fields that follow stay together. */
+.group-fields>.control-box[data-solo]{flex:1 1 45%}
+.group-fields>.control-box:not([data-solo]){flex:1 1 100%}
+.group-fields>.field-number{flex:0 0 190px;padding-top:2px}
+.field{display:block;padding:0}
+.field-head{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+/* A switch is one row: what it does on the left, the control on the right. */
+.field-boolean{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.field-boolean .field-head{margin-bottom:0}
+.field-boolean .switch-wrap{flex:0 0 auto}
+.field-label{font-size:.83rem;font-weight:500;color:var(--secondary);line-height:1.3}
+.info{width:16px;height:16px;flex:0 0 16px;border:0;background:none;padding:0;cursor:pointer;color:var(--muted);display:inline-flex;align-items:center}
+.info svg{display:block}
+.info:hover,.info:focus-visible{color:var(--blue)}
+.field.inactive{opacity:.45}
+/* A switch and the inputs it governs, boxed so the grouping is unmistakable. */
+.control-box{border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fbfcfe}
+.control-box[data-solo]{padding:9px 14px}
+.control-box .box-switch{margin:0}
+.control-box .box-switch .field-label{font-weight:600;color:var(--ink,#111)}
+.box-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 20px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.switch-wrap{display:flex;align-items:center;gap:9px;min-height:auto;padding:0}
+
+/* ---- info box ---- */
+#info{border:0;border-radius:12px;padding:26px 28px 22px;max-width:44rem;width:calc(100% - 32px);box-shadow:0 18px 50px rgba(16,24,40,.22);color:var(--secondary)}
+#info::backdrop{background:rgba(16,24,40,.45)}
+#info h2{font-size:1.05rem;margin:0 0 10px;color:var(--ink,#111)}
+#info p{font-size:.88rem;line-height:1.55;margin:0 0 12px}
+#info-links{display:flex;gap:10px;flex-wrap:wrap;font-size:.82rem;margin:0}
+.info-close{position:absolute;top:10px;right:12px;border:0;background:none;font-size:1.5rem;line-height:1;cursor:pointer;color:var(--muted)}
+.info-close:hover{color:var(--ink,#111)}
+
+/* ---- collapsible panels ---- */
+.panel{border-top:1px solid var(--line);margin-top:28px}
+.panel>summary{cursor:pointer;padding:16px 0;list-style:none}
+.panel>summary::-webkit-details-marker{display:none}
+.panel>summary h2{display:inline;font-size:1.15rem}
+.panel>summary::before{content:"\25B8";display:inline-block;margin-right:10px;color:var(--muted);transition:transform .15s}
+.panel[open]>summary::before{transform:rotate(90deg)}
+
+/* ---- the breakdown, set like a statement of account ---- */
+.accounts{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.accounts td{padding:5px 0;font-size:.85rem;vertical-align:baseline}
+.accounts td.numeric{text-align:right;white-space:nowrap;padding-left:24px;width:1%}
+.accounts tr.line td:first-child{padding-left:18px;color:var(--secondary)}
+.accounts tr.total td{font-weight:600;border-top:1px solid var(--line);padding-top:7px}
+.accounts tr.head th{text-align:left;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:20px 0 4px;font-weight:600}
+.accounts tr.head:first-child th{padding-top:4px}
+.accounts tr.muted td{opacity:.45}
+
+@media(max-width:560px){.group-fields>.control-box[data-solo],.group-fields>.field-number,.box-fields>.field{flex:1 1 100%}#info{padding:22px 20px 18px}}
+
+
+/* ---- compact numeric fields: left aligned, fixed width, short sliders ---- */
+.box-fields{display:flex;flex-wrap:wrap;gap:12px 26px}
+.box-fields>.field{flex:0 0 190px}
+/* A switch inside a box needs the whole row: its label is a sentence. */
+.box-fields>.field-boolean{flex:1 0 100%}
+.field-number .value-control{justify-content:flex-start}
+.field-number .value-control input[type=number]{width:104px;min-height:36px;padding:6px 9px}
+.field-number input[type=range]{width:200px;height:22px;margin:6px 0 0}
+.box-fields{margin-top:10px;padding-top:10px}
+.control-box{padding:10px 14px 12px}

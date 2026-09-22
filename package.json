@@ -1,0 +1,12 @@
+{
+  "name": "tax-free-shopping-model",
+  "version": "1.0.0",
+  "description": "Reconstruction of Cebr's tax-free shopping calculation for the Heart of London Business Alliance",
+  "license": "MIT",
+  "author": "Tax Policy Associates Limited",
+  "homepage": "https://taxpolicy.org.uk/vat-free-shopping-cebr/",
+  "scripts": {
+    "start": "node serve.js",
+    "test": "node --test tests/*.test.js"
+  }
+}

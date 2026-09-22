@@ -1,0 +1,50 @@
+<!doctype html>
+<!-- Copyright Tax Policy Associates Limited 2026. MIT licence: see LICENSE. -->
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reconstruct Cebr’s tax-free shopping calculation and explore how its assumptions affect the result.">
+  <title>Tax-free shopping model | Tax Policy Associates</title>
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="styles.css?v=20260922-wttc">
+  <script src="model.js?v=20260922-wttc" defer></script>
+  <script src="comparison.js?v=20260922-wttc" defer></script>
+  <script src="app.js?v=20260922-wttc" defer></script>
+</head>
+<body>
+<a class="skip" href="#assumptions">Skip to inputs</a>
+<main class="wrap">
+  <header class="top">
+    <a class="brand" href="https://taxpolicy.org.uk/" aria-label="Tax Policy Associates"><img src="tpal-logo.jpg" width="136" height="40" alt="Tax Policy Associates"></a>
+    <div class="tools"><button id="share" type="button">Copy scenario link</button><button id="download" type="button">Download calculation</button></div>
+  </header>
+  <h1>Would tax-free shopping pay for itself?</h1>
+  <div class="preset-bar"><div id="presets" role="group" aria-label="Starting settings"></div><span id="scenario-name"></span></div>
+  <p id="input-error" class="error" role="alert" hidden></p>
+  <p id="load-notice" class="notice" hidden></p>
+  <noscript><p class="error">This model needs JavaScript to calculate results. Enable JavaScript and reload this page.</p></noscript>
+  <section class="results" aria-label="Model results">
+    <div class="headline-pair">
+      <div class="balance" id="voucher-tile" hidden><h2>Cash voucher per visitor</h2><output id="voucher-headline" class="big-number">Pending</output></div>
+      <div class="balance"><h2>Economic output, GVA</h2><output id="gva-headline" class="big-number">Pending</output></div>
+      <div class="balance"><h2>Net Exchequer impact</h2><output id="net" class="big-number">Pending</output></div>
+    </div>
+    <dl class="fiscal-parts"><div><dt>Additional tax receipts</dt><dd id="tax">Pending</dd></div><div><dt id="refunds-label">VAT refunds</dt><dd id="refunds">Pending</dd></div></dl>
+    <dl class="economic-results"><div><dt>Additional visitor spending</dt><dd id="extra-spending">Pending</dd></div><div><dt>Additional visits <button id="visitors-help" class="info" type="button" aria-label="Why additional visits are not estimated" hidden><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="6.9" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="4.7" r=".95" fill="currentColor"/><path d="M8 7.3v4.4" stroke="currentColor" stroke-width="1.6"/></svg></button></dt><dd id="visitors">Pending</dd><dd id="visitors-note" class="field-hint"></dd></div><div><dt>Supported jobs</dt><dd id="jobs">Pending</dd></div></dl>
+    <p class="result-scope">Annual 2025 scenario, in nominal pounds.</p>
+  </section>
+  <div id="announcement" class="sr" role="status" aria-live="polite" aria-atomic="true"></div>
+  <section id="assumptions" aria-labelledby="assumptions-title"><div class="section-head"><h2 id="assumptions-title">Inputs</h2><button id="expand" class="text-button" type="button">Expand all</button></div><div id="controls"></div></section>
+  <details class="panel working-section"><summary><h2>Calculation breakdown</h2></summary><div class="table-scroll" tabindex="0" role="region" aria-label="Calculation breakdown"><table class="accounts"><tbody id="working"></tbody></table></div></details>
+  <details class="panel" id="reconciliation"><summary><h2>Reconciliation with Cebr’s published report</h2></summary><div class="table-scroll" tabindex="0" role="region" aria-label="Published figures and reconstructed results"><table><thead><tr><th scope="col">Reported item</th><th scope="col" class="numeric">Cebr</th><th scope="col" class="numeric">This model</th><th scope="col" class="numeric">Difference</th></tr></thead><tbody id="comparisons"></tbody></table></div></details>
+  <dialog id="info" aria-labelledby="info-title">
+    <form method="dialog"><button class="info-close" type="submit" aria-label="Close">&times;</button></form>
+    <h2 id="info-title"></h2><p id="info-body"></p><p id="info-links"></p>
+  </dialog>
+  <footer class="provenance">
+    <p>Inputs come from <a href="https://holba.london/content/images/Cebr-report-for-Heart-of-London-Business-Alliance.pdf#page=19" target="_blank" rel="noopener">Cebr’s report</a>, other cited evidence or stated judgments. Nothing is fitted to its published results. Read the <a href="https://taxpolicy.org.uk/?p=31363#methodology" target="_blank" rel="noopener">methodology</a> or see <a href="https://github.com/DanNeidle/tax_free_shopping_public" target="_blank" rel="noopener">the code</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
