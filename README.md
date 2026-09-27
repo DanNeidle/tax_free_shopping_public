@@ -2,7 +2,7 @@
 
 A reconstruction of the calculation in Cebr's September 2026 report for the Heart of London Business Alliance, which concluded that bringing back VAT-free shopping for overseas visitors would add £11.5bn to the economy, support 153,000 jobs and hand the Exchequer a net £2.6bn.
 
-The model opens on Cebr's own approach and reproduces its headline GVA and Exchequer figures. You can then switch off each of the four errors we found, one at a time, and change any assumption you disagree with. Correcting all four turns the £2.6bn gain into a £600m loss.
+The model opens on Cebr's own approach and reproduces its headline GVA and Exchequer figures. You can then test our alternatives and change any assumption you disagree with. Using our illustrative £1.44 GVA benchmark, together with the other three corrections, turns the £2.6bn gain into a £600m loss. That loss depends on the benchmark. Deloitte's underlying totals include government spending and investment, so they don't establish the marginal GVA from extra visitor spending. We apply one overall additionality percentage; those totals don't identify three separate visitor-generated rounds.
 
 The write-up is at [taxpolicy.org.uk](https://taxpolicy.org.uk/vat-free-shopping-cebr/), which sets out the full methodology.
 

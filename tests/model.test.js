@@ -24,18 +24,15 @@ test('100% fees remove the stimulus, preserving the baseline cost',()=>{const r=
 test('the two responses compound rather than add',()=>{const r=M.calculate();near(r.extraSpending,r.settings.spending*((1+r.arrivalsGrowth)*(1+r.spendingGrowth)-1));near(r.interaction,r.arrivalsSpending*r.spendingGrowth);});
 test('a single elasticity is independent of the arrivals coefficient',()=>{const a=M.calculate({twoElasticities:false,arrivalsElasticity:-1}),b=M.calculate({twoElasticities:false,arrivalsElasticity:-3});near(a.extraSpending,b.extraSpending);assert.equal(a.extraVisits,null);assert.equal(b.extraVisits,null);assert.equal(a.arrivalsGrowth,null);assert.equal(a.totalVisits,null);assert.equal(a.arrivalsSpending,null);near(a.extraSpending,a.settings.spending*a.spendingGrowth);near(a.interaction,0);});
 test('the price denominator is UK spending alone, with no fare component',()=>{const a=M.calculate({spending:40,visits:40});near(a.denominator,40);assert.equal('fare' in a.settings,false,'the fare control has been removed');assert.equal(a.fareCost,undefined,'and no fare cost is reported');});
-test('the value-added conversion and displacement stay separate',()=>{const share=58/113.1;const a=M.calculate(),b=M.calculate({multiplierOnSpending:false}),c=M.calculate({multiplierOnSpending:false,ignoreSubstitution:false,additionalityDirect:40,additionalityIndirect:40,additionalityInduced:40});
+test('the illustrative benchmark and displacement stay separate',()=>{const share=58/113.1;const a=M.calculate(),b=M.calculate({multiplierOnSpending:false}),c=M.calculate({multiplierOnSpending:false,ignoreSubstitution:false,additionality:40});
   near(b.extraSpending,a.extraSpending);near(b.grossGva,a.gva*share);near(c.gva,a.gva*share*.4);near(c.tax,a.tax*share*.4);});
-test('equal additionality across rounds is exactly a flat haircut',()=>{for(const share of [0,17,50,100]){const a=M.calculate(),b=M.calculate({ignoreSubstitution:false,additionalityDirect:share,additionalityIndirect:share,additionalityInduced:share});near(b.gva,a.gva*share/100);near(b.additionalShare,share/100);near(b.effectiveMultiplier,2.8*share/100);}});
-test('the rounds come from the published Type I and Type II multipliers',()=>{
-  const typeOne=126.9/58,typeTwo=160.5/58;
-  const onlyDirect=M.calculate({ignoreSubstitution:false,additionalityDirect:100,additionalityIndirect:0,additionalityInduced:0});
-  near(onlyDirect.additionalShare,1/typeTwo);
-  const noInduced=M.calculate({ignoreSubstitution:false,additionalityDirect:100,additionalityIndirect:100,additionalityInduced:0});
-  near(noInduced.additionalShare,typeOne/typeTwo);
-  // Dropping the employee-spending round leaves the published Type I figure of 2.2.
-  assert.equal(noInduced.effectiveMultiplier.toFixed(1),'2.2');
-  near(M.calculate({ignoreSubstitution:false,additionalityDirect:0,additionalityIndirect:0,additionalityInduced:0}).gva,0);
+test('overall additionality scales GVA without changing demand or refunds',()=>{for(const share of [0,17,50,100]){const a=M.calculate(),b=M.calculate({ignoreSubstitution:false,additionality:share});near(b.gva,a.gva*share/100);near(b.extraSpending,a.extraSpending);near(b.refunds,a.refunds);near(b.additionalShare,share/100);near(b.effectiveMultiplier,2.8*share/100);}});
+test('one overall additionality assumption replaces the unsupported round split',()=>{
+  assert.deepEqual(M.CONTROLS.filter(c=>c.key.startsWith('additionality')).map(c=>c.key),['additionality']);
+  const encoded=encodeURIComponent(JSON.stringify({v:6,settings:{additionalityDirect:100,additionalityIndirect:50,additionalityInduced:0}}));
+  const decoded=M.decode('#'+encoded);
+  assert.ok(decoded.notices.length);
+  assert.deepEqual(decoded.settings,{...M.DEFAULTS});
 });
 test('the first three presets are the published approach, the corrections and our central case',()=>{
   const cebr=M.calculate(M.PRESETS.cebr.values),corrected=M.calculate(M.PRESETS.corrected.values),central=M.calculate(M.PRESETS.central.values);
@@ -47,7 +44,7 @@ test('the first three presets are the published approach, the corrections and ou
 });
 test('induced refunds change the ledger, not the ex-ante incentive',()=>{const a=M.calculate({ignoreInducedRefundCost:true}),b=M.calculate({ignoreInducedRefundCost:false});near(a.discount,b.discount);near(a.extraSpending,b.extraSpending);near(b.refunds-a.refunds,b.extraSpending/24);near(a.netFiscal-b.netFiscal,b.extraSpending/24);assert.equal(b.refunds.toFixed(1),'1.6');assert.equal(b.netFiscal.toFixed(1),'2.4');});
 test('zero take-up, eligibility, VAT or spending removes the stimulus',()=>{for(const input of [{takeup:0},{eligibility:0},{vat:0},{spending:0}]){const r=M.calculate({...input,ignoreInducedRefundCost:false});near(r.refunds,0);near(r.extraSpending,0);near(r.netFiscal,0);assert.equal(r.taxPerRefund,null);}});
-test('values behind an unset switch have no economic effect',()=>{const a=M.calculate(),b=M.calculate({additionalityDirect:0,additionalityIndirect:0,additionalityInduced:0});near(a.netFiscal,b.netFiscal);near(a.extraSpending,b.extraSpending);});
+test('values behind an unset switch have no economic effect',()=>{const a=M.calculate(),b=M.calculate({additionality:0});near(a.netFiscal,b.netFiscal);near(a.extraSpending,b.extraSpending);});
 test('the elasticities are plain inputs with no switch between them',()=>{const r=M.calculate({arrivalsElasticity:-0.9,spendingElasticity:-0.7,twoElasticities:false,taxRate:15});assert.equal(r.arrivalsGrowth,null);near(r.spendingGrowth,.7/24);near(r.tax,r.gva*.15);near(r.extraSpending,r.settings.spending*r.spendingGrowth);});
 test('normalisation rejects invalid types and clamps bounds',()=>{const n=M.normalise({spending:NaN,visits:0,fee:Infinity,twoElasticities:'true',taxRate:900});assert.equal(n.settings.spending,M.DEFAULTS.spending);assert.equal(n.settings.visits,.01);assert.equal(n.settings.twoElasticities,true);assert.equal(n.settings.taxRate,100);assert.equal(n.notices.length,5);});
 test('share URLs preserve the full numerical precision of every setting',()=>{const s={...M.DEFAULTS,spending:33.234567891,fee:37,ignoreSubstitution:false};assert.deepEqual(M.decode('#'+M.encode(s)).settings,s);assert.ok(M.decode('#garbage').notices.length);assert.ok(M.decode(encodeURIComponent(JSON.stringify({v:99,settings:{}}))).notices.length);});
@@ -110,9 +107,9 @@ test('the presets differ only where the analysis says they should',()=>{
 
 test('unestimated visits remain null in reconciliation and exports',()=>{const r=M.calculate(M.PRESETS.corrected.values);const rows=M.reconcile(r);for(const key of ['arrivalsGrowth','extraVisits','totalVisits','arrivalsSpending','tableVisits']){const row=rows.find(x=>x.key===key);assert.equal(row.value,null,key);assert.equal(row.match,false,key);}assert.equal(JSON.parse(JSON.stringify(r)).extraVisits,null);assert.equal(M.isActive(M.CONTROLS.find(c=>c.key==='arrivalsElasticity'),r.settings),false);});
 
-/* ---- Free money: a cash voucher per arrival in place of the refund ---- */
+/* ---- Free lunch: a cash voucher per arrival in place of the refund ---- */
 const VOUCHER_COST = v => v*(43.6*33.2/33.4)/1000;
-test('free money is off everywhere except its own preset, and changes nothing when off',()=>{
+test('free lunch is off everywhere except its own preset, and changes nothing when off',()=>{
   assert.equal(M.DEFAULTS.freeMoney,false);assert.equal(M.DEFAULTS.voucher,100,'the scenario opens on a £100 voucher');
   for(const key of ['cebr','corrected','central']){
     assert.equal(M.PRESETS[key].values.freeMoney,false,key);
@@ -121,10 +118,10 @@ test('free money is off everywhere except its own preset, and changes nothing wh
     const base=M.calculate(M.PRESETS[key].values);
     const other=M.calculate({...M.PRESETS[key].values,voucher:150});
     const outputs=r=>{const {settings,...rest}=JSON.parse(JSON.stringify(r));return rest;};
-    assert.deepEqual(outputs(other),outputs(base),key+': a voucher value is inert while free money is off');
+    assert.deepEqual(outputs(other),outputs(base),key+': a voucher value is inert while free lunch is off');
   }
 });
-test('free money replaces the refund with a flat payment per arrival',()=>{
+test('free lunch replaces the refund with a flat payment per arrival',()=>{
   const r=M.calculate({freeMoney:true,voucher:100});
   near(r.staticRefunds,0);near(r.voucherCost,VOUCHER_COST(100));near(r.baselineCost,VOUCHER_COST(100));
   near(r.visitorSaving,VOUCHER_COST(100));near(r.discount,VOUCHER_COST(100)/33.2);
@@ -157,7 +154,7 @@ test('the voucher is a fixed set of options, not a free number',()=>{
   assert.equal(M.normalise({voucher:150}).settings.voucher,150);
   assert.equal(M.isActive(c,{freeMoney:false}),false);assert.equal(M.isActive(c,{freeMoney:true}),true);
 });
-test('the VAT-refund inputs have no effect once free money is on',()=>{
+test('the VAT-refund inputs have no effect once free lunch is on',()=>{
   const base={freeMoney:true,voucher:100};
   const a=M.calculate(base);
   for(const input of [{shoppingShare:0},{eligibility:0},{vat:0},{takeup:0},{fee:100}]){
@@ -197,7 +194,7 @@ test('the free-money preset is Cebr’s approach with the switch thrown and noth
   assert.ok(r.netFiscal>0,'Cebr’s method makes a cash handout profitable');
   assert.ok(r.tax/r.refunds>2.79,'and the return per pound exceeds the q*M*e floor');
 });
-test('correcting both errors is what stops free money paying for itself',()=>{
+test('correcting both errors is what stops free lunch paying for itself',()=>{
   const v={freeMoney:true,voucher:100};
   assert.ok(M.calculate(v).netFiscal>0,'as published');
   assert.ok(M.calculate({...v,multiplierOnSpending:false}).netFiscal>0,'multiplier alone is not enough');
@@ -212,7 +209,7 @@ test('every offered voucher stays within eligible shopping, so the goods restric
       assert.ok(o.value<=eligiblePerVisitor,`£${o.value} exceeds £${eligiblePerVisitor.toFixed(2)} of eligible shopping under ${preset}`);
   }
 });
-test('free money keeps the fiscal identity across the option set',()=>{
+test('free lunch keeps the fiscal identity across the option set',()=>{
   for(const voucher of [0,31.9,50,100,150])for(const twoElasticities of [false,true])for(const ignoreInducedRefundCost of [false,true]){
     const r=M.calculate({freeMoney:true,voucher,twoElasticities,ignoreInducedRefundCost});
     near(r.netFiscal,r.tax-r.refunds-r.admin);

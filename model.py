@@ -16,7 +16,7 @@ def reference(s):
     choose=lambda switch,key,fallback:share(key) if s[switch] else D(fallback)
     gross=n('spending')*share('shoppingShare')*share('eligibility')
     vat=n('vat')/(100+n('vat'))
-    # Free money pays a flat voucher per arrival instead of refunding VAT. No
+    # Free lunch pays a flat voucher per arrival instead of refunding VAT. No
     # intermediary takes a cut, so no fee is deducted
     free=bool(s['freeMoney'])
     voucher_cost=n('voucher')*n('visits')/1000
@@ -33,12 +33,9 @@ def reference(s):
     else:
         # Independently calculate new total sales, then remove baseline sales.
         new_sales=n('spending')*(1+arrivals)*(1+spending)-n('spending')
-    # VisitBritain's published Type I and Type II GVA multipliers, derived here rather
-    # than imported, so a change in the engine's constants cannot pass unnoticed.
-    type_one,type_two=D('126.9')/D(58),D('160.5')/D(58)
-    rounds=(D(1)/type_two,(type_one-1)/type_two,(type_two-type_one)/type_two)
-    additional=D(1) if s['ignoreSubstitution'] else (rounds[0]*share('additionalityDirect')
-                +rounds[1]*share('additionalityIndirect')+rounds[2]*share('additionalityInduced'))
+    # One overall additionality judgment. The historical benchmark below is
+    # illustrative and does not identify separate visitor-generated rounds.
+    additional=D(1) if s['ignoreSubstitution'] else share('additionality')
     value_added=new_sales*(D(1) if s['multiplierOnSpending'] else D(58)/D('113.1'))*n('multiplier')*additional
     tax=value_added*share('taxRate')
     # A voucher is paid per arrival, so costing induced ones needs an arrivals
@@ -61,7 +58,7 @@ class IndependentReference(unittest.TestCase):
             s=dict(defaults)
             for key,value in s.items():
                 if isinstance(value,bool): s[key]=bool(random_source.getrandbits(1))
-            for key in ['shoppingShare','eligibility','takeup','passThrough','fee','salience','additionalityDirect','additionalityIndirect','additionalityInduced','taxRate']:
+            for key in ['shoppingShare','eligibility','takeup','passThrough','fee','salience','additionality','taxRate']:
                 s[key]=random_source.choice([0,10,30,50,80,100])
             # Only the offered amounts, because the engine normalises to that set.
             s['voucher']=random_source.choice([0,31.9,50,100,150])

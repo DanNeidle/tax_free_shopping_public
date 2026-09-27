@@ -227,8 +227,7 @@
 
     head('From spending to economic output');
     line('Additional visitor spending',money(r.extraSpending));
-    if(!s.multiplierOnSpending) line(`Direct value added within it, ${pct(100*M.DIRECT_VALUE_ADDED)}`,money(r.directGva));
-    line(`Multiplier applied, ${fmt(s.multiplier,2)}×`,money(r.grossGva));
+    line(`${s.multiplierOnSpending?'Cebr’s GVA ratio':'Illustrative GVA benchmark'}, £${fmt(r.gvaPerPoundSpending,2)} per £1 spent`,money(r.grossGva));
     if(!s.ignoreSubstitution) line(`Less activity displaced elsewhere, ${pct(100*(1-r.additionalShare))}`,money(r.gva-r.grossGva));
     total('Gross value added',money(r.gva));
     line('Supported jobs',count(r.jobs));
@@ -285,7 +284,7 @@
     $('net').textContent=(result.netFiscal>0?'+':result.netFiscal<0?'−':'')+bn(Math.abs(result.netFiscal));
     $('net').classList.toggle('negative',result.netFiscal<0);
     $('tax').textContent=bn(result.tax);$('refunds').textContent=bn(result.refunds);
-    // Free money is a different scenario, so say so at the top rather than
+    // Free lunch is a different scenario, so say so at the top rather than
     // leaving the reader to find the switch that produced these numbers.
     $('refunds-label').textContent=settings.freeMoney?'Cost of cash vouchers':'VAT refunds';
     $('voucher-tile').hidden=!settings.freeMoney;
@@ -318,7 +317,7 @@
       return;
     }
     const payload={version:M.VERSION,scenario:M.presetName(settings),units:'Money in £bn unless identified; visits in millions; jobs in persons supported.',
-      qualification:'Source-based reconstruction and user sensitivities. No fitting to published outputs. See methodology for input provenance and limitations.',
+      qualification:'Reconstruction and illustrative alternatives. The £1.44 historical GVA benchmark includes government spending and investment in its source totals; it is not a measured marginal visitor-spending effect. Fiscal results depend on the selected benchmark and overall additionality. No fitting to published outputs. See the methodology for sources and limitations.',
       settings,result,reconciliation:C.reconcile(result).map(({get,...row})=>row),controls:M.CONTROLS,sources:M.SOURCES};
     const blob=new Blob([JSON.stringify(payload,null,2)+'\n'],{type:'application/json'});const url=URL.createObjectURL(blob);
     const a=document.createElement('a');a.href=url;a.download='tax-free-shopping-calculation.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);message('Download requested. The JSON includes the inputs and calculation.');
